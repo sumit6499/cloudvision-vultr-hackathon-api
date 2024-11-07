@@ -79,7 +79,9 @@ To run this project, you will need to add the following environment variables to
 
 `GENERATE_CODE_ARN`='ecs_task_arn'
 
-`INFRA_BUILD_ARN`=='ecs_task_arn'
+`INFRA_BUILD_ARN`='ecs_task_arn'
+
+`VULTR_INFERENCE_KEY`='your_vultr_inference_key'
 
 
 ## API Reference
@@ -112,6 +114,32 @@ To run this project, you will need to add the following environment variables to
             "terraformID": null
         }
     }
+}
+```
+
+#### Chatbot Responses
+
+```http
+  POST api/v1/chatbot/completion
+```
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `Headers` | Authorization | **Required**. Bearer vultr inference token |
+| `userMessage` | string | **Required**. Image file |
+
+#### example request 
+```json
+{
+    "userMessage":"what is vultr"
+}
+```
+
+#### example response 
+```json
+{
+    "success": true,
+    "msg": "message from Chatbot",
+    "data": "Vultr is a cloud computing platform that provides on-demand virtual servers, also known as VPS (Virtual Private Servers), in multiple locations around the world. It allows users to quickly and easily deploy their own computing environments with root access and full control over the operating system and software installed."
 }
 ```
 
