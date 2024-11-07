@@ -1,0 +1,7 @@
+opencv-python 
+pillow 
+pytesseract 
+torch 
+torchvision 
+networkx 
+matplotlib
