@@ -1,54 +1,64 @@
-import {PrismaClient} from '@prisma/client'
-import {writeFileSync} from 'fs'
-import {exec} from 'child_process'
-import { error } from 'console'
-import { exit } from 'process'
-const prisma=new PrismaClient()
+import { PrismaClient } from '@prisma/client';
+import { writeFileSync } from 'fs';
+import { exec } from 'child_process';
+import { exit } from 'process';
 
-const terraformId=Bun.env.TERRAFORM_ID
+const prisma = new PrismaClient();
 
-if(!terraformId){
-    console.log('terraform id not found')
-    exit(0)
+const terraformId = Bun.env.TERRAFORM_ID 
+console.log(terraformId)
+if (!terraformId) {
+    console.log('Terraform ID not found');
+    exit(0);
 }
 
-const getInfraCode=async ()=>{
+const getInfraCode = async () => {
     try {
-        const terraformCode=await prisma.terraform.findFirst({
+        const terraformCode = await prisma.terraform.findFirst({
             where: {
-                id: terraformId
+                id: terraformId,
             },
-            select:{
-                terraformCode:true
-            }
-        })
-        return terraformCode?.terraformCode
+            select: {
+                terraformCode: true,
+            },
+        });
+        console.log(terraformCode)
+        return terraformCode?.terraformCode;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-    
-}
+};
 
-const writeTerraformFile=async ()=>{
-    const code=await getInfraCode() 
-    if(code){
-        writeFileSync('main.tf',code,'utf-8')
-        const envs=`VULTR_API_KEY=${Bun.env.VULTR_API_KEY}`
-        writeFileSync('terraform.tfvara',envs,'utf-8')
-    }else{
-        exit(0)
+
+
+const triggerTerraformCommands = () => {
+    console.log('trigger')
+    exec('terraform init', (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error initializing Terraform: ${stderr}`);
+            exit(1);
+        }
+        console.log(stdout);
+        
+        exec('terraform apply --auto-approve', (err, stdout, stderr) => {
+            if (err) {
+                console.error(`Error running Terraform plan: ${stderr}`);
+                exit(1);
+            }
+            console.log(stdout);
+        });
+    });
+};
+
+const writeTerraformFile = async () => {
+    const code = await getInfraCode();
+    if (code) {
+        writeFileSync('main.tf', code, 'utf-8');
+        triggerTerraformCommands();
+        console.log('infra created')
+    } else {
+        exit(0);
     }
-}
+};
 
-const applyTerraformInfra=()=>{
-    exec('terraform init',(error)=>{
-        console.log('error in terraform init',error)
-        exit(0)
-    })
-    exec('terraform plan',(error)=>{
-        console.log('error in terraform plan',error)
-    })
-}
-
-writeTerraformFile()
-applyTerraformInfra()
+writeTerraformFile();
