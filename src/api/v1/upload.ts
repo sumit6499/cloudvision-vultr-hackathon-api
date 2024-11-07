@@ -1,14 +1,15 @@
 import {Hono,Context} from 'hono'
 import {successMsgWithData,errorMsg} from '../../utils/responseMsg'
 import {ZodError} from 'zod'
-import {DiagramSchema,DiagramSchemaType} from '../../validators/'
 import handleUpload from '../../services/upload.service'
 import {getUser} from '../../services/user.service'
 import { Diagrams } from '../../models/schema'
 import { User } from '@prisma/client'
 import {storeDiagram} from '../../services/database.service'
-const router=new Hono()
+import {generateCode} from '../../lib/ecs.config'
 
+const router=new Hono()
+const vultr_api=Bun.env.VULTR_API_KEY as string
 
 router.post('/diagram', async (c:Context) => {
     try {
@@ -27,10 +28,12 @@ router.post('/diagram', async (c:Context) => {
             //store to database
             const user=await getUser('sumit') as User
             const diagram=new Diagrams(user.id,url)
-            const validData:DiagramSchemaType=DiagramSchema.parse(diagram)
-            const dbDiagram=await storeDiagram(validData)
+            // const validData:DiagramSchemaType=DiagramSchema.parse(diagram)
+            const dbDiagram=await storeDiagram(diagram) as Diagrams
             
-
+            if(dbDiagram.id)
+                await generateCode(dbDiagram.id,vultr_api)
+            
             return c.json(successMsgWithData({
                 success:true,
                 msg:"File uploaded Successfully",
