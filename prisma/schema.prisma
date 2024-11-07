@@ -1,16 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -33,24 +29,21 @@ enum Status {
 }
 
 model Diagrams {
-  id         String       @id @default(uuid())
-  userID     String
-  User       User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String?
-  uploadAt   DateTime     @default(now())
-  url        String
-  status     Status       @default(NOT_STARTED)
-  components Components[]
+  id        String      @id @default(uuid())
+  userID    String
+  User      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  uploadAt  DateTime    @default(now())
+  url       String
+  status    Status      @default(NOT_STARTED)
+  terraformID String?   
 }
 
-model Components {
-  id          String    @id @default(uuid())
-  Diagrams    Diagrams? @relation(fields: [diagramsId], references: [id], onDelete: Cascade)
-  diagramsId  String?
-  serviceName String    @default("vultr")
-  region      String?   @default("ap-south-1")
-  createdAt   DateTime  @default(now())
-  Cost        Cost?
+model Terraform {
+  id            String    @id @default(uuid())
+  uploadedAt    DateTime  @default(now())
+  terraformCode String    @map("terraform_code") @db.Text
+  status        Status    @default(NOT_STARTED)
 }
 
 enum Currency {
@@ -59,9 +52,7 @@ enum Currency {
 }
 
 model Cost {
-  id            String      @id @default(uuid())
-  Component     Components? @relation(fields: [componentsId], references: [id])
-  componentsId  String?     @unique
-  estimatedCost Float       @default(0.0)
-  currency Currency @default(RS)
+  id            String   @id @default(uuid())
+  estimatedCost Float    @default(0.0)
+  currency      Currency @default(RS)
 }
