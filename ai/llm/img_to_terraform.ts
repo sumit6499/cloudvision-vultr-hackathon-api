@@ -1,16 +1,29 @@
 import { HfInference } from "@huggingface/inference"
 import { exit } from "process"
 import defaultCode from "./default/constant_code"
+import {diagramID} from './index'
+import {PrismaClient} from '@prisma/client'
+const prisma=new PrismaClient()
 
 const client = new HfInference("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")
 
-const imgUrl=Bun.env.IMG_URL 
+const imgUrl=await prisma.diagrams.findFirst({
+	where:{
+		id:Bun.env.DIAGRAM_ID
+	},
+	select:{
+		url:true
+	}
+})
 
-if(!imgUrl){
+console.log("img_url",imgUrl)
+
+if(!imgUrl?.url){
 	console.log('image url not found')
 	exit(0)
 }
 
+const prompt="Analyze this infrastructure diagram for Vultr cloud deployment. Focus on identifying these components: instances (servers), block storage volumes, private networks, and load balancers. Describe their relationships and configurations in a structured format. Instruction: entire response inside two delimiter &&) response should be between two symbol that can act as delimiter."
 
 const stream = client.chatCompletionStream(
 {
@@ -21,11 +34,11 @@ const stream = client.chatCompletionStream(
 			content: [
 				{
 					type:"image_url",
-					"image_url":{"url":imgUrl}
+					"image_url":{"url":imgUrl.url}
 				},
 				{
 					type:"text",
-					text:"you are terraform expert and can create terraform code by undstanding image provided to you and put in entire code in terraform language (entire terraform code inside two delimiter &&). Create only terraform code  with property content for given image . Instruction: response should be between two symbol that can act as delimiter."
+					text:prompt?prompt:"you are terraform expert and can create terraform code by undstanding image provided to you and put in entire code in terraform language (entire terraform code inside two delimiter &&). Create only terraform code  with property content for given image . Instruction: response should be between two symbol that can act as delimiter."
 				} 
 			]
 					
@@ -54,5 +67,4 @@ const getStream=async ()=>{
 }
 
 const llmRes=await getStream()
-
 export default llmRes
