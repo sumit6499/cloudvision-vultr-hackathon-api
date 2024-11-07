@@ -1,18 +1,9 @@
 export const createCostEstimate=()=>{
-
+    //getcostestimate
 }
 
-export const deleteCostEstimate=()=>{
-
-}
-
-export const updateCostEstimate=()=>{
-
-}
 export const createReport=()=>{
-
+    //generate report
 }
 
-export const deleteReport=()=>{
 
-}
