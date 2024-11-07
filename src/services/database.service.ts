@@ -16,7 +16,7 @@ const connect = async () => {
     });
 };
 
-const storeDiagram=async (data:DiagramSchemaType)=>{
+const storeDiagram=async (data:Diagrams)=>{
   try {
     const diagram=await db.diagrams.create({
       data:{
@@ -26,12 +26,27 @@ const storeDiagram=async (data:DiagramSchemaType)=>{
       }
     })
   
-    return diagram
+    return diagram 
   } catch (error) {
     console.log(error)
     return error
   }
   
+}
+
+export const getDiagram=async (diagramID:string)=>{
+  try {
+    const diagram=await db.diagrams.findFirst({
+      where:{
+        id: diagramID
+      }
+    })
+  
+    return diagram?.terraformID
+  } catch (error) {
+    console.log(error)
+    return error
+  }
 }
 
 export {
