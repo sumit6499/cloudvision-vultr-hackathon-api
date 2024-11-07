@@ -6,8 +6,7 @@ const router=new Hono()
 
 router.post('/create', async (c:Context) => {
     try {
-        const { configId } = await c.req.json();
-        // const jobId = await createInfrastructure(configId); // Custom infra creation function
+        
         return c.json(successMsg({
             success:true,
             msg:"infrastructure creation started"
@@ -31,7 +30,7 @@ router.post('/create', async (c:Context) => {
     }
   });
 
-router.get('/all',async (c) => {
+router.get('/all',async (c:Context) => {
     try {
         const { jobId } = c.req.query();
         // const status = await getInfrastructureStatus(jobId);

@@ -1,0 +1,58 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String     @id @default(uuid())
+  name         String     @db.VarChar(30)
+  email        String     @unique
+  passwordHash String     @map("password_hash")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @map("updated_at")
+  diagrams     Diagrams[]
+}
+
+enum Status {
+  NOT_STARTED
+  UPLOADING
+  UPLOADED
+  PROCESSING
+  PROCESSED
+}
+
+model Diagrams {
+  id        String      @id @default(uuid())
+  userID    String
+  User      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  uploadAt  DateTime    @default(now())
+  url       String
+  status    Status      @default(NOT_STARTED)
+  terraformID String?   
+}
+
+model Terraform {
+  id            String    @id @default(uuid())
+  uploadedAt    DateTime  @default(now())
+  terraformCode String    @map("terraform_code") @db.Text
+  status        Status    @default(NOT_STARTED)
+}
+
+enum Currency {
+  RS
+  USD
+}
+
+model Cost {
+  id            String   @id @default(uuid())
+  estimatedCost Float    @default(0.0)
+  currency      Currency @default(RS)
+}

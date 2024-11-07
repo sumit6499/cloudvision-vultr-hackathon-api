@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { successMsg } from './utils/responseMsg'
 import {logger} from 'hono/logger'
-import databaseConnect from './services/database.service'
+import {connect as databaseConnect} from './services/database.service'
 import router from './api/v1/route'
 const app = new Hono()
 

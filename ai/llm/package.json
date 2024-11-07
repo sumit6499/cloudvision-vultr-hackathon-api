@@ -1,0 +1,22 @@
+{
+  "name": "terraform_ai",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run index.ts",
+    "prestart": "prisma generate"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.685.0",
+    "@huggingface/inference": "^2.8.1",
+    "@prisma/client": "5.13.0",
+    "axios": "^1.7.7",
+    "prisma": "^5.22.0"
+  }
+}

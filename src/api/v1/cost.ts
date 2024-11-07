@@ -33,7 +33,7 @@ router.post('/create', async (c:Context) => {
     }
   });
 
-router.get('/all',async (c) => {
+router.get('/all',async (c:Context) => {
     try {
         const { jobId } = c.req.query();
         // const status = await getInfrastructureStatus(jobId);
