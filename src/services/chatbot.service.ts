@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api_key='CVPVKWDAH7PIAJGD4X5JYD5YG2B54M6RCELA'
+const api_key=Bun.env.VULTR_INFERENCE_KEY
 
 export const chatCompletion=async ()=>{
 
@@ -18,7 +18,7 @@ export const chatCompletion=async ()=>{
 
 const storeEmbeddings=async (msg:string)=>{
 let data = JSON.stringify({
-  "content": "Hii how are you",
+  "content": msg,
   "description": "user messages"
 });
 
@@ -51,8 +51,8 @@ type chatbotRes={
 
 export const chatCompletionRAG=async(userMsg:string)=>{
 
-    const embeddings=await storeEmbeddings(userMsg)
-
+  // const embeddings=await storeEmbeddings(userMsg)
+  console.log("usermsg",userMsg)
 
 let data = JSON.stringify({
   "collection": "cloudvision",
@@ -73,8 +73,7 @@ let data = JSON.stringify({
 
 let config = {
   method: 'post',
-  maxBodyLength: Infinity,
-  url: 'https://api.vultrinference.com/v1/chat/completions/RAG',
+  url: 'https://api.vultrinference.com/v1/chat/completions',
   headers: { 
     'Content-Type': 'application/json', 
     'Authorization': `Bearer ${api_key}`
@@ -82,10 +81,16 @@ let config = {
   data : data
 };
 
+  try {
+    
     const res=await axios.request(config)
     return res.data.choices[0].message.content as string
+  } catch (error) {
+    console.log(error)
+  }
 
 }
+
 
 
 
