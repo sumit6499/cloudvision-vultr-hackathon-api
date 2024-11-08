@@ -40,7 +40,6 @@ function generateProviderConfig(credentials: Credentials) {
 }
 
 function parseInfrastructureDescription(description: string) {
-    // Parse the GPT-4 Vision API response for Vultr-specific resources
     const resources = [];
     const lines = description.split('\n');
 
