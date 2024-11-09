@@ -49,48 +49,65 @@ type chatbotRes={
     content:string
 }
 
-export const chatCompletionRAG=async(userMsg:string)=>{
 
-  // const embeddings=await storeEmbeddings(userMsg)
-  console.log("usermsg",userMsg)
+export const chatCompletionRAG = async (userMsg: string): Promise<string | undefined> => {
+  console.log("User message:", userMsg);
 
-let data = JSON.stringify({
-  "collection": "cloudvision",
-  "model": "zephyr-7b-beta-Q5_K_M",
-  "messages": [
-    {
-      "role": "user",
-      "content": userMsg
-    }
-  ],
-  "max_tokens": 512,
-  "seed": -1,
-  "temperature": 0.8,
-  "top_k": 40,
-  "top_p": 0.9,
-  "stream": false
-});
-
-let config = {
-  method: 'post',
-  url: 'https://api.vultrinference.com/v1/chat/completions',
-  headers: { 
-    'Content-Type': 'application/json', 
-    'Authorization': `Bearer ${api_key}`
-  },
-  data : data,
-  timeout:5000
-};
-
-  try {
-    
-    const res=await axios.request(config)
-    return res.data.choices[0].message.content as string
-  } catch (error) {
-    console.log(error)
+  const api_key = process.env.VULTR_API_KEY;
+  if (!api_key) {
+    console.error("API key is not defined. Please set your VULTR_API_KEY environment variable.");
+    return;
   }
 
-}
+  const data = JSON.stringify({
+    collection: "cloudvision",
+    model: "zephyr-7b-beta-Q5_K_M",
+    messages: [
+      {
+        role: "user",
+        content: userMsg
+      }
+    ],
+    max_tokens: 512,
+    seed: -1,
+    temperature: 0.8,
+    top_k: 40,
+    top_p: 0.9,
+    stream: false
+  });
+
+  console.log("Data object:", data);
+
+  const config = {
+    method: 'post',
+    url: 'https://api.vultrinference.com/v1/chat/completions',
+    headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${api_key}`
+    },
+    data: data,
+    timeout: 5000
+  };
+
+  console.log("Config object:", config);
+
+  try {
+    const res = await axios.request(config);
+    console.log("Response:", res.data);
+
+    return res.data.choices[0]?.message?.content as string;
+  } catch (error: any) {
+    if (error.response) {
+      console.error("Server responded with an error:", error.response.status, error.response.data);
+    } else if (error.request) {
+      console.error("No response received from server:", error.request);
+    } else {
+      console.error("Error setting up request:", error.message);
+    }
+    console.error("Error stack:", error.stack);
+  }
+};
+
 
 
 

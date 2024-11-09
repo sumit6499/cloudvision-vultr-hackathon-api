@@ -6,17 +6,7 @@ import {connect as databaseConnect} from './services/database.service'
 import router from './api/v1/route'
 const app = new Hono()
 
-app.use(
-  '/api/',
-  cors({
-    origin: '*',
-    allowHeaders: ['X-Custom-Header', 'Upgrade-Insecure-Requests'],
-    allowMethods: ['POST', 'GET', 'PUT','DELETE'],
-    exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
-    maxAge: 600,
-    credentials: true,
-  })
-)
+app.use('/api',cors())
 
 app.use(logger())
 databaseConnect()
@@ -36,7 +26,7 @@ app.notFound((c)=>{
 })
 
 export default {
-  port:process.env.PORT || 3000,
+  port:Bun.env.PORT || 5000,
   fetch:app.fetch,
   maxRequestBodySize:1024*1024*200,
 }
