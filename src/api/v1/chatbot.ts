@@ -8,6 +8,7 @@ const router=new Hono()
 
 router.post('/completion',async (c:Context)=>{
     const {userMessage} = await c.req.json()
+    console.log(userMessage)
     try {
         
         const res=await chatCompletionRAG(userMessage)

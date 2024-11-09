@@ -78,7 +78,8 @@ let config = {
     'Content-Type': 'application/json', 
     'Authorization': `Bearer ${api_key}`
   },
-  data : data
+  data : data,
+  timeout:5000
 };
 
   try {
