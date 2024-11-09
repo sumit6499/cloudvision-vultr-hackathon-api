@@ -11,7 +11,7 @@ The **CloudVision Vultr Hackathon API** provides tools for managing infrastructu
 1. [Features](#features)
 2. [Installation](#installation)
 3. [Usage](#usage)
-4. [API Endpoints](#api-endpoints)
+4. [API Endpoints](#api-reference)
 5. [Project Structure](#project-structure)
 6. [Configuration](#configuration)
 7. [Scripts](#scripts)
