@@ -6,7 +6,7 @@ import {connect as databaseConnect} from './services/database.service'
 import router from './api/v1/route'
 const app = new Hono()
 
-app.use('/api',cors())
+app.use(cors())
 
 app.use(logger())
 databaseConnect()
