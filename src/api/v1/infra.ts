@@ -5,6 +5,7 @@ import { createInfra, getInfra } from '../../services/infra.service'
 import {db} from '../../lib/db.config'
 import {getDiagram} from '../../services/database.service'
 import { fetch_infra } from '../../utils/vultr/fetch_infra'
+import { Prisma } from '@prisma/client'
 
 const router=new Hono()
 
@@ -70,6 +71,48 @@ router.get('/all',async (c:Context) => {
         }),500)
     }
     
+})
+
+router.get('/code/:id',async (c:Context)=>{
+    try {
+        
+        const diagramID =c.req.param('id')
+        const terraformId=await getDiagram(diagramID) as string
+
+        const terraform_code=await db.terraform.findFirst({
+            where:{
+                id:terraformId
+            },
+            select:{
+                terraformCode:true
+            }
+        })
+
+        return c.json(successMsgWithData({
+            success:true,
+            msg:"Infra code fetched successfully",
+            data:terraform_code
+        }))
+
+    } catch (error) {
+        console.log(error)
+        if(error instanceof ZodError){
+            const formattedError=error.format()
+            return c.json(errorMsg({
+                success:false,
+                error:formattedError,
+                msg:error.name
+            }),400)
+        }
+
+        return c.json(errorMsg({
+            success:false,
+            msg:"Internal Server error",
+            error:error
+        }),500)
+    }
+    
+
 })
 
 export default router
