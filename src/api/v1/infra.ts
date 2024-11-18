@@ -13,9 +13,10 @@ router.post('/create', async (c:Context) => {
         const {diagramID}=await c.req.json()
         console.log(diagramID)
         const terraformId=await getDiagram(diagramID) as string
+        console.log(terraformId)
 
         if(terraformId)
-            await createInfra(terraformId)
+            await createInfra(terraformId,diagramID)
         
         return c.json(successMsg({
             success:true,

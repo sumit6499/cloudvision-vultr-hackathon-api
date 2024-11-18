@@ -2,9 +2,9 @@ import {runCreateInfraTask,runUpdateInfraTask,runDeleteInfraTask,runGetInfratask
 import {fetch_infra} from '../utils/vultr/fetch_infra'
 import {createInfrastructure} from '../lib/ecs.config'
 
-export const createInfra=async (terraformId:string)=>{
+export const createInfra=async (terraformId:string,diagramID:string)=>{
     
-    await createInfrastructure(terraformId)
+    await createInfrastructure(terraformId,diagramID)
     return 'true'
 }   
 

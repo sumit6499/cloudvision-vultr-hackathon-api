@@ -42,7 +42,7 @@ export const generateCode=async(diagramId:string,vultrAPI:string)=>{
     await client.send(generateInfraTask)
 }
 
-export const createInfrastructure=async (terraformId:string)=>{
+export const createInfrastructure=async (terraformId:string,diagramID:string)=>{
     const createInfraTask=new RunTaskCommand({
         taskDefinition:Bun.env.INFRA_BUILD_ARN,
         cluster:"arn:aws:ecs:ap-south-1:472838134367:cluster/terraform_server",
@@ -60,7 +60,12 @@ export const createInfrastructure=async (terraformId:string)=>{
                 environment:[{
                     name: 'TERRAFORM_ID',
                     value: terraformId
-                }]
+                },
+                {
+                    name:'DIAGRAM_ID',
+                    value: diagramID
+                }
+            ]
             }]
         }
     })
