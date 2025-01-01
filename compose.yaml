@@ -1,5 +1,13 @@
-version: '3'
+version: '3.9'
+
 services:
+  api:
+    image: cloudvision:latest
+    ports:
+      - 5000:5000
+    depends_on:
+      - "db"
+      - "cache"
   cache:
     image: redis:7.4.1-alpine
     ports:
@@ -10,6 +18,7 @@ services:
       - 5432:5432
     environment:
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgrespwd
+      - POSTGRES_DB=cloudvision
     secrets:
       - postgrespwd
 secrets:

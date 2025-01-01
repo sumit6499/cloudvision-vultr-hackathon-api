@@ -1,0 +1,46 @@
+version: '3'
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 5000:5000
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@db:5432/cloudvision
+    volumes:
+      - ./src:/app/src
+      - ./node_module:/app/node_module
+      - ./package.json:/app/package.json
+    env_file:
+      - .env
+    depends_on:
+      - "db"
+      - "cache"
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app
+          ignore:
+            - node_module/
+        - action: rebuild
+          path: ./package.json
+  cache:
+    image: redis:7.4.1-alpine
+    ports:
+      - 6379:6379
+  db:
+    image: postgres:17.2-alpine3.21
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER-postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=cloudvision
+      
+
+  
+
+  

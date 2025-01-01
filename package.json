@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
-    "postinstall": "prisma generate"
+    "build": "bun build --entrypoints ./src/index.ts --outdir ./out",
+    "prestart": "prisma generate"
   },
   "dependencies": {
     "@aws-sdk/client-ecs": "^3.683.0",
@@ -17,7 +18,6 @@
     "moment": "^2.30.1",
     "morgan": "^1.10.0",
     "prisma": "^5.21.1",
-    "socket.io": "^4.8.1",
     "winston": "^3.16.0",
     "zod": "^3.23.8"
   },

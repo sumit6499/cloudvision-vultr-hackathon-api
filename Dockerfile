@@ -1,28 +1,24 @@
-FROM oven/bun:1 AS base
+FROM oven/bun:edge AS base
+
 WORKDIR /usr/src/app
 
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lockb /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+FROM base as builder
 
-RUN mkdir -p /temp/prod
-COPY package.json bun.lockb /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+COPY package.json bun.lockb ./
 
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+#we need devdep to build ts and other code
+RUN bun install --production=false 
+
 COPY . .
 
-ENV NODE_ENV=production
-RUN bun test
-RUN bun run build
+RUN bun build src/index.ts --outdir dist
 
-FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /usr/src/app/index.ts .
-COPY --from=prerelease /usr/src/app/package.json .
+FROM base AS runner
 
-USER bun
-EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "index.ts" ]
+COPY --from=builder /app/dist  ./dist
+COPY --from=builder /app/bun.lockb  ./bun.lockb
+COPY --from=builder /app/package.json  ./package.json
+
+RUN bun install --production --frozen-lockfile --verbose
+
+ENTRYPOINT [ "bun","dist/index.js" ]

@@ -13,10 +13,9 @@ The **CloudVision Vultr Hackathon API** provides tools for managing infrastructu
 3. [Usage](#usage)
 4. [API Endpoints](#api-reference)
 5. [Project Structure](#project-structure)
-6. [Configuration](#configuration)
-7. [Scripts](#scripts)
-8. [Contributing](#contributing)
-9. [License](#license)
+6. [Scripts](#scripts)
+7. [Contributing](#contributing)
+8. [License](#license)
 
 ---
 
@@ -217,15 +216,7 @@ The project uses several services to encapsulate core logic:
 3. Upload Service (services/upload.service.ts): Handles file storage operations with S3.
 4. User Service (services/user.service.ts): Manages user authentication and other user-related operations.
 
-## Services
 
-The project uses several services to encapsulate core logic:
-
-1. Cost Service (services/cost.service.ts): Handles cost estimation logic for infrastructure resources.
-
-2. Infra Service (services/infra.service.ts): Manages infrastructure operations, including creation, fetching details, and deletion.
-3. Upload Service (services/upload.service.ts): Handles file storage operations with S3.
-4. User Service (services/user.service.ts): Manages user authentication and other user-related operations.
 
 
 ## Tech Stack
