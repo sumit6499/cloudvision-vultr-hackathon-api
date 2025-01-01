@@ -83,6 +83,8 @@ To run this project, you will need to add the following environment variables to
 
 `VULTR_INFERENCE_KEY`='your_vultr_inference_key'
 
+`REDIS_URL`='your_redis_db_url'
+
 
 ## API Reference
 
