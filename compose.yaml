@@ -1,0 +1,22 @@
+version: '3'
+services:
+  cache:
+    image: redis:7.4.1-alpine
+    ports:
+      - 6379:6379
+  db:
+    image: postgres:17.2-alpine3.21
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgrespwd
+    secrets:
+      - postgrespwd
+secrets:
+  postgrespwd:
+    file: ./pgpwd.txt
+      
+
+  
+
+  
