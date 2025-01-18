@@ -47,11 +47,11 @@ router.post('/completion', async (c: Context) => {
     }
    
   } catch (err:unknown) {
-    console.log('Error:', err.message);
+    console.log('Error:',err);
     return c.json({
       success: false,
       msg: 'Internal Server Error',
-      err: err.message || err,
+      err: err,
     }, 500);
   }
 });

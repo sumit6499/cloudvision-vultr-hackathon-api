@@ -4,8 +4,7 @@ import {ZodError} from 'zod'
 import { createInfra, getInfra } from '../../services/infra.service'
 import {db} from '../../lib/db.config'
 import {getDiagram} from '../../services/database.service'
-import { fetch_infra } from '../../utils/vultr/fetch_infra'
-import { Prisma } from '@prisma/client'
+
 
 const router=new Hono()
 
