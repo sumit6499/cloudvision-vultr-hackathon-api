@@ -1,4 +1,4 @@
-FROM oven/bun:edge AS base
+FROM oven/bun:canary-alpine AS base
 
 WORKDIR /usr/src/app
 

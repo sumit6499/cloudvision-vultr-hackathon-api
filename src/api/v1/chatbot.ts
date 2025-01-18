@@ -46,7 +46,7 @@ router.post('/completion', async (c: Context) => {
           }));
     }
    
-  } catch (err) {
+  } catch (err:unknown) {
     console.log('Error:', err.message);
     return c.json({
       success: false,

@@ -17,7 +17,7 @@ app.route('/api/v1',router)
 app.get('/', (c) => {
   return c.json(successMsg({
     success:true,
-    msg:"Hello form cloudvision server"
+    msg:"Hello form cloudvision server "
   }),200)
 })
 
