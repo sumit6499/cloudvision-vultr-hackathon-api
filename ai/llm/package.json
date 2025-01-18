@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run index.ts",
-    "prestart": "prisma generate"
+    "prestart": "prisma generate",
+    "build": "bun build ./index.ts --outdir dist"
   },
   "devDependencies": {
     "@types/bun": "latest"

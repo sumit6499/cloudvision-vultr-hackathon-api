@@ -18,7 +18,8 @@ router.post('/diagram', async (c:Context) => {
         const username=body['username']
         
         
-        if(img && img instanceof File && img.type != 'png'){
+        
+        if(img && img instanceof File ){
 
             const fileBuffer=Buffer.from(await img.arrayBuffer())
 

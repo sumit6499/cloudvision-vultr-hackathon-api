@@ -2,6 +2,12 @@ import axios from 'axios'
 
 const api_key=Bun.env.VULTR_INFERENCE_KEY
 
+type chatbotRes={
+  role:string,
+  content:string
+}
+
+
 export const chatCompletion=async ()=>{
 
         let config={
@@ -42,11 +48,6 @@ axios.request(config)
 });
 
 
-}
-
-type chatbotRes={
-    role:string,
-    content:string
 }
 
 

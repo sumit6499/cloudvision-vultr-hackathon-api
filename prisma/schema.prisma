@@ -1,22 +1,20 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id           String     @id @default(uuid())
+  id           String     @id @default(cuid())
   name         String     @db.VarChar(30)
   email        String     @unique
   passwordHash String     @map("password_hash")
   createdAt    DateTime   @default(now()) @map("created_at")
-  updatedAt    DateTime   @map("updated_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
   diagrams     Diagrams[]
 }
 
@@ -29,21 +27,21 @@ enum Status {
 }
 
 model Diagrams {
-  id        String      @id @default(uuid())
-  userID    String
-  User      User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
-  uploadAt  DateTime    @default(now())
-  url       String
-  status    Status      @default(NOT_STARTED)
-  terraformID String?   
+  id          String   @id @default(cuid())
+  userID      String
+  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+  uploadAt    DateTime @default(now())
+  url         String
+  status      Status   @default(NOT_STARTED)
+  terraformID String?
 }
 
 model Terraform {
-  id            String    @id @default(uuid())
-  uploadedAt    DateTime  @default(now())
-  terraformCode String    @map("terraform_code") @db.Text
-  status        Status    @default(NOT_STARTED)
+  id            String   @id @default(cuid())
+  uploadedAt    DateTime @default(now())
+  terraformCode String   @map("terraform_code") @db.Text
+  status        Status   @default(NOT_STARTED)
 }
 
 enum Currency {
@@ -52,7 +50,9 @@ enum Currency {
 }
 
 model Cost {
-  id            String   @id @default(uuid())
+  id            String   @id @default(cuid())
   estimatedCost Float    @default(0.0)
   currency      Currency @default(RS)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 }

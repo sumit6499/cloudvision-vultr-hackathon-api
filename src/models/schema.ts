@@ -17,7 +17,7 @@ export class User {
   email: string;
   passwordHash: string;
 
-  constructor( name: string, email: string, passwordHash: string) {
+  constructor( name: string="", email: string="", passwordHash: string="") {
       this.name = name;
       this.email = email;
       this.passwordHash = passwordHash;
@@ -35,9 +35,9 @@ export class Diagrams {
   userId?: string;
   url: string;
   status: Status;
-  terraformID?: string;
+  terraformID: string;
 
-  constructor(userID: string, url: string, status: Status = Status.NOT_STARTED, uploadAt: Date = new Date(), terraformID?: string) {
+  constructor(userID: string="", url: string="", status: Status = Status.NOT_STARTED, uploadAt: Date = new Date(), terraformID: string="") {
       this.userID = userID;
       this.url = url;
       this.status = status;
